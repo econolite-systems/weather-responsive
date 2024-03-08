@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<!-- SPDX-License-Identifier: MIT -->
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Econolite.Ode.Services.WeatherResponsive</RootNamespace>
+    <Copyright>2023-&lt;&lt;CURRENT_YEAR&gt;&gt; Econolite Systems, Inc.</Copyright>
+</PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)\common\Auditing\Auditing.csproj" />
+        <ProjectReference Include="$(SolutionDir)\common\Authorization\Authorization.csproj" />
+        <ProjectReference Include="..\Repository.WeatherResponsive\Repository.WeatherResponsive.csproj" />
+    </ItemGroup>
+
+</Project>

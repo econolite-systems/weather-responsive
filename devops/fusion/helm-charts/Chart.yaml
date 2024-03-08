@@ -1,0 +1,4 @@
+apiVersion: v1
+description: ODE Weather Fusion
+name: "ode-weather-fusion"
+version: 0.1.0

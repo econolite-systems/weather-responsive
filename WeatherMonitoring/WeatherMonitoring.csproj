@@ -1,0 +1,35 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+<!-- SPDX-License-Identifier: MIT -->
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>9b22cf55-6a29-4b64-83fa-695daf3b3f16</UserSecretsId>
+    <Copyright>2023-&lt;&lt;CURRENT_YEAR&gt;&gt; Econolite Systems, Inc.</Copyright>
+</PropertyGroup>
+
+    <ItemGroup>
+        <Compile Remove="openapiClient.cs" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <PackageReference Include="GeoCoordinate.NetCore" Version="1.0.0.1" />
+        <PackageReference Include="Microsoft.Extensions.ApiDescription.Client" Version="7.0.9">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)\common\Extensions.AspNet\Extensions.AspNet.csproj" />
+        <ProjectReference Include="$(SolutionDir)\common\Scheduler.Base\Scheduler.Base.csproj" />
+        <ProjectReference Include="$(SolutionDir)\common\Monitoring.HealthChecks.Mongo\Monitoring.HealthChecks.Mongo.csproj" />
+        <ProjectReference Include="$(SolutionDir)\common\Monitoring.HealthChecks.Redis\Monitoring.HealthChecks.Redis.csproj" />
+        <ProjectReference Include="..\Weather\Repository.WeatherResponsive\Repository.WeatherResponsive.csproj" />
+        <ProjectReference Include="..\Weather\Weather.Common.Cache\Weather.Common.Cache.csproj" />
+    </ItemGroup>
+
+</Project>

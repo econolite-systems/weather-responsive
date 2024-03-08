@@ -1,0 +1,4 @@
+apiVersion: v1
+description: ODE Weather Monitoring
+name: "ode-weather-monitoring"
+version: 0.1.0

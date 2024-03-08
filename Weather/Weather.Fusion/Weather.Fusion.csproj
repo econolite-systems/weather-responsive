@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+<!-- SPDX-License-Identifier: MIT -->
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  <Copyright>2023-&lt;&lt;CURRENT_YEAR&gt;&gt; Econolite Systems, Inc.</Copyright>
+</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="$(SolutionDir)\status\Status.Ess\Status.Ess.csproj" />
+    <ProjectReference Include="..\Weather.Gov\Weather.Gov.csproj" />
+  </ItemGroup>
+
+</Project>

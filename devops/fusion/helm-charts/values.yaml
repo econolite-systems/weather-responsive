@@ -1,0 +1,13 @@
+odeWeatherFusion:
+  name: ode-weather-fusion
+  imageRepository: cosysdev.azurecr.io/ode-weather-fusion
+  service:
+    port: 80
+  probes:
+    enabled: false
+  ingress:
+    host: api.mound-rd.cosysdev.com
+  kafka:
+    groupid: 'weather-fusion'
+  resources: {}
+  

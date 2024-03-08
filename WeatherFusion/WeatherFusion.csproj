@@ -1,0 +1,27 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+<!-- SPDX-License-Identifier: MIT -->
+
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
+        <UserSecretsId>5d6b7502-46a7-4ba6-8e5e-603f1e64e2d5</UserSecretsId>
+    <Copyright>2023-&lt;&lt;CURRENT_YEAR&gt;&gt; Econolite Systems, Inc.</Copyright>
+</PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Microsoft.VisualStudio.Azure.Containers.Tools.Targets" Version="1.18.1" />
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="$(SolutionDir)\common\Extensions.AspNet\Extensions.AspNet.csproj" />
+        <ProjectReference Include="$(SolutionDir)\common\Monitoring.HealthChecks.Mongo\Monitoring.HealthChecks.Mongo.csproj" />
+        <ProjectReference Include="$(SolutionDir)\common\Monitoring.HealthChecks.Redis\Monitoring.HealthChecks.Redis.csproj" />
+        <ProjectReference Include="$(SolutionDir)\common\Scheduler.Base\Scheduler.Base.csproj" />
+        <ProjectReference Include="$(SolutionDir)\status\Status.Ess.Cache\Status.Ess.Cache.csproj" />
+        <ProjectReference Include="..\Weather\Repository.WeatherResponsive\Repository.WeatherResponsive.csproj" />
+        <ProjectReference Include="..\Weather\Weather.Common.Cache\Weather.Common.Cache.csproj" />
+        <ProjectReference Include="..\Weather\Weather.Gov\Weather.Gov.csproj" />
+    </ItemGroup>
+
+</Project>

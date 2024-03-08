@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ .Values.odeWeatherMonitoring.name }}
+data:
+  appsettings.Production.json: |
+    {
+      "Authentication": {
+          "Authority": "{{ .Values.url.identity }}"
+      },
+      "Kafka": {
+          "bootstrap": {
+              "servers": "{{ .Values.kafka.server }}"
+          },
+          "ssl": {
+            "ca": "{{.Values.kafka.ca}}",
+            "certificate": "{{.Values.kafka.certificate}}"
+          },
+          "sasl": {
+              "mechanism": "SCRAM-SHA-512",
+              "username": "{{ .Values.kafka.userName }}"
+          },
+          "security": {
+               "protocol": "{{.Values.kafka.security.protocol}}"
+          },
+          "groupId": "{{ .Values.odeWeatherMonitoring.kafka.groupId }}",
+      },
+      "Mongo": {
+        "DbName": "{{ .Values.mongo.databaseName }}"
+      },
+      "MobilityApi": "{{ .Values.url.mobilityApi }}"
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.odeWeatherMonitoring.name }}
+  labels:
+    app: {{ .Values.odeWeatherMonitoring.name }}
+    chart: {{ .Values.odeWeatherMonitoring.name }}
+    release: {{ .Release.Name }}
+
+  annotations:
+ 
+spec:
+  revisionHistoryLimit: 0
+  replicas: {{ .Values.replicaCount | default 1 }}
+  selector:
+    matchLabels:
+      app: {{ .Values.odeWeatherMonitoring.name }}
+      release: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.odeWeatherMonitoring.name }}
+     
+        release: {{ .Release.Name }}
+      annotations:
+
+    spec:
+      topologySpreadConstraints:
+        - maxSkew: 1
+          topologyKey: "kubernetes.io/hostname"
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              release: {{ .Release.Name }}
+      imagePullSecrets:
+        - name: {{ .Values.secrets.imagePullSecret }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ .Values.odeWeatherMonitoring.name }}
+      containers:
+        - name: {{ .Values.odeWeatherMonitoring.name }}
+          image: "{{ .Values.odeWeatherMonitoring.imageRepository }}:{{ .Values.odeWeatherMonitoring.imageTag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: Kafka__sasl__password
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.kafka.userName }}
+                  key: password
+            - name: ConnectionStrings__Mongo
+              valueFrom:
+                secretKeyRef:
+                  name: mongo-cs
+                  key: MongoRWConnectionString
+            - name: ConnectionStrings__Redis
+              valueFrom:
+                secretKeyRef:
+                  name: redis-cs
+                  key: RedisConnection
+            - name: Authentication__ClientId
+              valueFrom:
+                secretKeyRef:
+                  name: authentication
+                  key: clientId
+            - name: Authentication__ClientSecret
+              valueFrom:
+                secretKeyRef:
+                  name: authentication
+                  key: clientSecret
+          volumeMounts:
+            - name: config
+              mountPath: /app/appsettings.Production.json
+              subPath: appsettings.Production.json
+              readOnly: true
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          {{- if .Values.odeWeatherMonitoring.probes.enabled }}
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+          {{- end }}
+          resources:
+{{ toYaml .Values.odeWeatherMonitoring.resources | indent 12 }}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.odeWeatherMonitoring.name }}
+  labels:
+    app: {{ .Values.odeWeatherMonitoring.name }}
+    chart: {{ .Values.odeWeatherMonitoring.name }}
+    release: {{ .Release.Name }}
+ 
+spec:
+  type: ClusterIP
+  ports:
+    - port: {{ .Values.odeWeatherMonitoring.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app: {{ .Values.odeWeatherMonitoring.name }}
+    release: {{ .Release.Name }}
